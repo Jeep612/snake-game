@@ -15,13 +15,13 @@ cell_size = 20
 snake_speed = 5
 snake_length = 3
 snake_body = []
-
+# создаём положение яблока
 for i in range(snake_length):
     snake_body.append(pygame.Rect((screen_width / 2) - (cell_size * i), screen_height / 2, cell_size, cell_size))
 snake_direction = "right"
 new_direction = "right"
 apple_position = pygame.Rect(random.randint(0, screen_width - cell_size), random.randint(0, screen_height - cell_size), cell_size, cell_size)
-
+# основной цикл игры и обработка событий на клавиатуре
 game_over = False
 while not game_over:
     for event in pygame.event.get():
@@ -36,7 +36,7 @@ while not game_over:
                 new_direction = "left"
             elif event.key == pygame.K_RIGHT and snake_direction != "left":
                 new_direction = "right"
-
+# движение змеи
     snake_direction = new_direction
     if snake_direction == "up":
         snake_body.insert(0, pygame.Rect(snake_body[0].left, snake_body[0].top - cell_size, cell_size, cell_size))
@@ -46,21 +46,21 @@ while not game_over:
         snake_body.insert(0, pygame.Rect(snake_body[0].left - cell_size, snake_body[0].top, cell_size, cell_size))
     elif snake_direction == "right":
         snake_body.insert(0, pygame.Rect(snake_body[0].left + cell_size, snake_body[0].top, cell_size, cell_size))
-
+# рост змеи
     if snake_body[0].colliderect(apple_position):
         apple_position = pygame.Rect(random.randint(0, screen_width - cell_size), random.randint(0, screen_height-cell_size), cell_size, cell_size)
         snake_length += 1
-
+# обрезка лишнего тела змеи если оно превышает текущ длину
     if len(snake_body) > snake_length:
         snake_body.pop()
-
+# проверка столкновений
     if snake_body[0].left < 0 or snake_body[0].right > screen_width or snake_body[0].top < 0 or snake_body[0].bottom > screen_height:
         game_over = True
 
     for i in range(1, len(snake_body)):
         if snake_body[0].colliderect(snake_body[i]):
             game_over = True
-
+# рисуется счётчик змея и яблоко
     screen.fill((0, 0, 0))
     for i in range(len(snake_body)):
         if i == 0:
